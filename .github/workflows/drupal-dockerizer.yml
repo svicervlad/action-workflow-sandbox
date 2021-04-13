@@ -17,6 +17,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /var/lib/docker/image
+        key: ${{ runner.os }}-docker-images
 
     - name: Get Drupal Project
       uses: actions/checkout@v2
