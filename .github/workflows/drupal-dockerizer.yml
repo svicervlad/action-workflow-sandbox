@@ -57,4 +57,4 @@ jobs:
         options: |
 
     - name: Check drupal
-      run: curl yn.devel | grep "YMCA of the North"
+      run: curl http://localhost | grep "Drupal"
