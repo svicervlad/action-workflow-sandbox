@@ -7,12 +7,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Get Drupal Project
+      uses: actions/checkout@v2
+      with:
+        repository: 'https://github.com/drupal/recommended-project.git'
+        path: './'
+
     - name: Add HTTP basic auth credentials
       run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
     - name: Install drupal
       uses: php-actions/composer@v5
       with:
-        command: create-project drupal/recommended-project . --ignore-platform-reqs
+        command: install --ignore-platform-reqs
 
     - name: Get DD
       uses: actions/checkout@v2
