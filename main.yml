@@ -7,7 +7,7 @@
 
   tasks:
 
-  - name: Bring up the Docker containers.
+  - name: Print id.
     command: id
 
   - name: Print msg.

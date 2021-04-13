@@ -1,0 +1,44 @@
+name: Check DD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Add HTTP basic auth credentials
+      run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+    - name: Install drupal
+      uses: php-actions/composer@v5
+      with:
+        command: create-project drupal/recommended-project . --ignore-platform-reqs
+
+    - name: Get DD
+      uses: actions/checkout@v2
+      with:
+        repository: 'https://github.com/jet-dev-team/drupal-dockerizer.git'
+        path: '.drupal-dockerizer'
+
+    - name: Create config.yml
+      run: |
+        echo "---" > config.yml
+        echo "" >> config.yml
+        echo "compose_project_name: drupal-project" >> config.yml
+        echo "user_uid: 1001" >> config.yml
+        echo "user_gid: 121" >> config.yml
+        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
+
+    - name: Setup containers
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: main.yml
+        options: |
+          --verbose
+
+    - name: Run drush commands
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: drush-commands.yml
+        options: |
+          --verbose
