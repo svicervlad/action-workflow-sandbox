@@ -13,6 +13,11 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
+    - name: Cache Docker images
+      uses: actions/cache@v2
+      with:
+        path: /var/lib/docker/image
+
     - name: Get Drupal Project
       uses: actions/checkout@v2
       with:
