@@ -10,7 +10,7 @@ jobs:
     - name: Get Drupal Project
       uses: actions/checkout@v2
       with:
-        repository: 'https://github.com/drupal/recommended-project.git'
+        repository: 'https://github.com/drupal/recommended-project'
         path: './'
 
     - name: Add HTTP basic auth credentials
@@ -23,7 +23,7 @@ jobs:
     - name: Get DD
       uses: actions/checkout@v2
       with:
-        repository: 'https://github.com/jet-dev-team/drupal-dockerizer.git'
+        repository: 'https://github.com/jet-dev-team/drupal-dockerizer'
         path: '.drupal-dockerizer'
 
     - name: Create config.yml
