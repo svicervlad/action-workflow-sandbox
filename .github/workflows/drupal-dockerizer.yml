@@ -1,57 +1,53 @@
-name: Check DD
+name: Check Drupal Dockerizer basic functionality
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-    - name: Cache Composer dependencies
+    - name: Cache Composer dependencies from improve speed
       uses: actions/cache@v2
       with:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-    - name: Get Drupal Project
+    - name: Get Drupal Project repository
       uses: actions/checkout@v2
       with:
         repository: 'drupal/recommended-project'
         path: './'
 
-    - name: Add HTTP basic auth credentials
+    - name: Add HTTP basic auth credentials for composer
       run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
 
-    - name: Install drupal
+    - name: Run composer install
       uses: php-actions/composer@v5
       with:
         command: install --ignore-platform-reqs
 
-    - name: update drupal
+    - name: Run composer update
       uses: php-actions/composer@v5
       with:
         command: update --ignore-platform-reqs
 
-    - name: Get DD
+    - name: Get Drupal Dockerizer repository
       uses: actions/checkout@v2
       with:
         repository: 'jet-dev-team/drupal-dockerizer'
         path: '.drupal-dockerizer'
 
-    - name: Create config.yml
+    - name: Create basic config.yml
       run: |
         echo "---" > config.yml
         echo "" >> config.yml
         echo "compose_project_name: drupal-project" >> config.yml
-        echo "user_uid: 1001" >> config.yml
-        echo "user_gid: 121" >> config.yml
+        echo "user_uid: $(id -u)" >> config.yml
+        echo "user_gid: $(id -g)" >> config.yml
         echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
 
-    - name: Cache docker images.
-      uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true
-
-    - name: Setup containers
+    - name: Run main playbook
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: main.yml
@@ -59,7 +55,7 @@ jobs:
         options: |
           --verbose
 
-    - name: Run drush commands
+    - name: Run drush-commands playbook
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: drush-commands.yml
