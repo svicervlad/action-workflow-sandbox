@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+
+
+  roles: []
+
+  tasks:
+
+  - name: Bring up the Docker containers.
+    command: id
+
+  - name: Print msg.
+    debug:
+      msg: "Normal work"
+
+  - name: Print msg with become.
+    become: true
+    debug:
+      msg: "Become work"
+
+  - name: Create dir with become.
+    become: true
+    file:
+      path: ".test"
+      state: directory
+      recurse: yes
