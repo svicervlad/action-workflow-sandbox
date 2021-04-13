@@ -13,12 +13,6 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-    - name: Cache Docker images
-      uses: actions/cache@v2
-      with:
-        path: /var/lib/docker/image
-        key: ${{ runner.os }}-docker-images
-
     - name: Get Drupal Project
       uses: actions/checkout@v2
       with:
@@ -52,6 +46,10 @@ jobs:
         echo "user_uid: 1001" >> config.yml
         echo "user_gid: 121" >> config.yml
         echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
+
+    - name: Cache docker images.
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      continue-on-error: true
 
     - name: Setup containers
       uses: dawidd6/action-ansible-playbook@v2
