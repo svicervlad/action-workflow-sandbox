@@ -1,0 +1,13 @@
+name: Check Composer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install drupal
+      uses: php-actions/composer@v5
+      with:
+        command: create-project drupal/recommended-project drupal
