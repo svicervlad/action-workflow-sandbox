@@ -15,10 +15,16 @@ jobs:
 
     - name: Add HTTP basic auth credentials
       run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+
     - name: Install drupal
       uses: php-actions/composer@v5
       with:
         command: install --ignore-platform-reqs
+
+    - name: update drupal
+      uses: php-actions/composer@v5
+      with:
+        command: update --ignore-platform-reqs
 
     - name: Get DD
       uses: actions/checkout@v2
@@ -35,9 +41,6 @@ jobs:
         echo "user_gid: 121" >> config.yml
         echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
 
-    - name: Print structure
-      run: ls -lha web/sites/default/
-
     - name: Setup containers
       uses: dawidd6/action-ansible-playbook@v2
       with:
@@ -52,4 +55,6 @@ jobs:
         playbook: drush-commands.yml
         directory: .drupal-dockerizer
         options: |
-          --verbose
+
+    - name: Check drupal
+      run: curl yn.devel | grep "YMCA of the North"
