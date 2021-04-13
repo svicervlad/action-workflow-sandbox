@@ -36,7 +36,7 @@ jobs:
         echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
 
     - name: Print structure
-      run: ls -lha
+      run: ls -lha web/sites/default/
 
     - name: Setup containers
       uses: dawidd6/action-ansible-playbook@v2
