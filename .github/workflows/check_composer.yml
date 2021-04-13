@@ -12,4 +12,4 @@ jobs:
     - name: Install drupal
       uses: php-actions/composer@v5
       with:
-        command: create-project drupal/recommended-project drupal
+        command: create-project drupal/recommended-project drupal --ignore-platform-reqs
