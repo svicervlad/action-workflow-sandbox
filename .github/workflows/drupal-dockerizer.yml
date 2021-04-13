@@ -61,6 +61,7 @@ jobs:
         playbook: drush-commands.yml
         directory: .drupal-dockerizer
         options: |
+          --verbose
 
     - name: Check drupal
       run: curl http://localhost | grep "Drupal"
