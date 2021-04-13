@@ -35,6 +35,9 @@ jobs:
         echo "user_gid: 121" >> config.yml
         echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
 
+    - name: Print structure
+      run: ls -lha
+
     - name: Setup containers
       uses: dawidd6/action-ansible-playbook@v2
       with:
