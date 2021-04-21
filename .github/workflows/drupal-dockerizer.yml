@@ -40,12 +40,12 @@ jobs:
 
     - name: Create basic config.yml
       run: |
-        echo "---" > config.yml
-        echo "" >> config.yml
-        echo "compose_project_name: drupal-project" >> config.yml
-        echo "user_uid: $(id -u)" >> config.yml
-        echo "user_gid: $(id -g)" >> config.yml
-        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
+        echo "---" > drupal-dockerizer.yml
+        echo "" >> drupal-dockerizer.yml
+        echo "compose_project_name: drupal-project" >> drupal-dockerizer.yml
+        echo "user_uid: $(id -u)" >> drupal-dockerizer.yml
+        echo "user_gid: $(id -g)" >> drupal-dockerizer.yml
+        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> drupal-dockerizer.yml
 
     - name: Run main playbook
       uses: dawidd6/action-ansible-playbook@v2
