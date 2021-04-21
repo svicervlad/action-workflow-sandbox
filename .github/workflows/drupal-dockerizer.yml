@@ -37,12 +37,12 @@ jobs:
 
     - name: Create basic dockerizer.yml
       run: |
-        echo "---" > dockerizer.yml
-        echo "" >> dockerizer.yml
-        echo "compose_project_name: drupal-project" >> dockerizer.yml
-        echo "user_uid: $(id -u)" >> dockerizer.yml
-        echo "user_gid: $(id -g)" >> dockerizer.yml
-        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> dockerizer.yml
+        echo "---" > drupal-dockerizer.yml
+        echo "" >> drupal-dockerizer.yml
+        echo "compose_project_name: drupal-project" >> drupal-dockerizer.yml
+        echo "user_uid: $(id -u)" >> drupal-dockerizer.yml
+        echo "user_gid: $(id -g)" >> drupal-dockerizer.yml
+        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> drupal-dockerizer.yml
 
     - name: Run main playbook
       uses: dawidd6/action-ansible-playbook@v2
@@ -62,3 +62,21 @@ jobs:
 
     - name: Check drupal
       run: curl http://localhost | grep "Drupal"
+
+    - name: screenshots-ci-action
+      uses: flameddd/screenshots-ci-action@v1.1.1
+      with:
+        url: http://localhost
+        devices: iPhone 6,iPhone 6 landscape
+        noDesktop: false
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: screenshots
+        name: Download-screenshots
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ".drupal-dockerizer/drupal-project/data/mysql"
+        name: database
+
