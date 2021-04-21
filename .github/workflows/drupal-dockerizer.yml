@@ -65,3 +65,15 @@ jobs:
 
     - name: Check drupal
       run: curl http://localhost | grep "Drupal"
+      
+    - name: screenshots-ci-action
+      uses: flameddd/screenshots-ci-action@v1.1.1
+      with:
+        url: http://localhost
+        devices: iPhone 6,iPhone 6 landscape
+        noDesktop: false
+        
+    - uses: actions/upload-artifact@v2
+      with:
+        path: screenshots
+        name: Download-screenshots
