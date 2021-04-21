@@ -77,3 +77,9 @@ jobs:
       with:
         path: screenshots
         name: Download-screenshots
+        
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ".drupal-dockerizer/drupal-project/data/mysql"
+        name: database
+
