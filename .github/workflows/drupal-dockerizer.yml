@@ -1,6 +1,10 @@
 name: Check Drupal Dockerizer basic functionality
 
 on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
   workflow_dispatch:
 
 jobs:
@@ -18,19 +22,12 @@ jobs:
       with:
         repository: 'drupal/recommended-project'
         path: './'
+        ref: '9.2.x'
 
-    - name: Add HTTP basic auth credentials for composer
-      run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
-
-    - name: Run composer install
+    - name: Run Composer install
       uses: php-actions/composer@v5
       with:
         command: install --ignore-platform-reqs
-
-    - name: Run composer update
-      uses: php-actions/composer@v5
-      with:
-        command: update --ignore-platform-reqs
 
     - name: Get Drupal Dockerizer repository
       uses: actions/checkout@v2
@@ -38,14 +35,14 @@ jobs:
         repository: 'jet-dev-team/drupal-dockerizer'
         path: '.drupal-dockerizer'
 
-    - name: Create basic config.yml
+    - name: Create basic dockerizer.yml
       run: |
-        echo "---" > config.yml
-        echo "" >> config.yml
-        echo "compose_project_name: drupal-project" >> config.yml
-        echo "user_uid: $(id -u)" >> config.yml
-        echo "user_gid: $(id -g)" >> config.yml
-        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> config.yml
+        echo "---" > dockerizer.yml
+        echo "" >> dockerizer.yml
+        echo "compose_project_name: drupal-project" >> dockerizer.yml
+        echo "user_uid: $(id -u)" >> dockerizer.yml
+        echo "user_gid: $(id -g)" >> dockerizer.yml
+        echo "drupal_root_dir: $GITHUB_WORKSPACE" >> dockerizer.yml
 
     - name: Run main playbook
       uses: dawidd6/action-ansible-playbook@v2
